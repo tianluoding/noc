@@ -3,7 +3,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -16,32 +15,30 @@ type User struct {
 	Name string `json:"name"`
 }
 
-func getUser(ctx *noc.Context) {
-	user := User{ID: 1, Name: "John Doe"}
-	jsonData, err := json.Marshal(user)
-	if err != nil {
-		http.Error(ctx.W, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	ctx.W.Header().Set("Content-Type", "application/json")
-	ctx.W.Write(jsonData)
+func RegisterRoutes(server *noc.ExampleServer) {
+	server.GET("/user", getUser)
+	server.POST("/user", registerUser)
 }
 
-func registerUser(ctx *noc.Context) {
+func getUser(ctx *noc.Context) error {
+	user := User{ID: 1, Name: "John Doe"}
+	return ctx.WriteJSON(http.StatusOK, user)
+}
+
+func registerUser(ctx *noc.Context) error {
 	var user User
-	err := json.NewDecoder(ctx.R.Body).Decode(&user)
+	err := ctx.ReadJSON(&user)
 	if err != nil {
-		http.Error(ctx.W, err.Error(), http.StatusBadRequest)
-		return
+		log.Printf("Error reading JSON: %v", err)
+		return err
 	}
-	defer ctx.R.Body.Close()
 	fmt.Printf("Received user: %+v\n", user)
-	ctx.W.WriteHeader(http.StatusOK)
+	return ctx.WriteJSON(http.StatusOK, nil)
 }
 
 func main() {
-	server := noc.NewExampleServer("example")
-	server.Route("GET", "/user", getUser)
-	server.Route("POST", "/user", registerUser)
+	router := noc.NewMapRouter()
+	server := noc.NewExampleServer("example", router)
+	RegisterRoutes(server)
 	log.Fatal(server.Start(":8080"))
 }
