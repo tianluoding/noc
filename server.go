@@ -3,6 +3,6 @@ package noc
 type HandlerFunc func(ctx *Context) error
 
 type Server interface {
-	Route(method string, path string, handler HandlerFunc)
+	Routable
 	Start(address string) error
 }

@@ -2,7 +2,11 @@ package noc
 
 import "net/http"
 
-type Router interface {
+type Routable interface {
 	Route(method string, path string, handler HandlerFunc)
+}
+
+type Router interface {
+	Routable
 	http.Handler
 }
