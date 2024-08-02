@@ -1,8 +1,9 @@
 package noc
 
 import (
-	"log"
 	"net/http"
+
+	"github.com/tianluoding/noc/logger"
 )
 
 var _ Server = &ExampleServer{}
@@ -30,7 +31,7 @@ func (s *ExampleServer) POST(path string, handler HandlerFunc) {
 }
 
 func (s *ExampleServer) Start(address string) error {
-	log.Printf("Server %s is listening on %s", s.ServerName, address)
+	logger.Logger.Infof("Server %s is listening on %s", s.ServerName, address)
 	return http.ListenAndServe(address, s.router)
 }
 

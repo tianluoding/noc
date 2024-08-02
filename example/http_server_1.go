@@ -3,12 +3,12 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
 	"github.com/tianluoding/noc"
 	"github.com/tianluoding/noc/filter"
+	"github.com/tianluoding/noc/logger"
 )
 
 type User struct {
@@ -30,14 +30,15 @@ func registerUser(ctx *noc.Context) error {
 	var user User
 	err := ctx.ReadJSON(&user)
 	if err != nil {
-		log.Printf("Error reading JSON: %v", err)
+		logger.Logger.Errorf("Error reading JSON: %v", err)
 		return err
 	}
-	fmt.Printf("Received user: %+v\n", user)
+	logger.Logger.Infof("Received user: %+v", user)
 	return ctx.WriteJSON(http.StatusOK, nil)
 }
 
 func main() {
+	logger.InitLogger()
 	server := noc.NewExampleServer("example")
 	server.AddFilters(filter.MetricFilter)
 	RegisterRoutes(server)
