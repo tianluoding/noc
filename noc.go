@@ -7,6 +7,13 @@ import (
 	"github.com/tianluoding/noc/logger"
 )
 
+var logo string = ` _______                 
+ \      \   ____   ____  
+ /   |   \ /  _ \_/ ___\ 
+/    |    (  <_> )  \___ 
+\____|__  /\____/ \___  >
+        \/            \/ `
+
 type HandlerFunc func(ctx *Context) error
 
 type Server interface {
@@ -38,13 +45,6 @@ func (s *Noc) GET(path string, handler HandlerFunc) {
 func (s *Noc) POST(path string, handler HandlerFunc) {
 	s.Route("POST", path, handler, s.filters...)
 }
-
-var logo string = ` _______                 
- \      \   ____   ____  
- /   |   \ /  _ \_/ ___\ 
-/    |    (  <_> )  \___ 
-\____|__  /\____/ \___  >
-        \/            \/ `
 
 func (s *Noc) Start(address string) error {
 	fmt.Println(logo)
