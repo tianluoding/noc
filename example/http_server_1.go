@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/tianluoding/noc"
+	"github.com/tianluoding/noc/filter"
 )
 
 type User struct {
@@ -37,8 +38,9 @@ func registerUser(ctx *noc.Context) error {
 }
 
 func main() {
-	router := noc.NewMapRouter()
-	server := noc.NewExampleServer("example", router)
+	server := noc.NewExampleServer("example")
+	server.AddFilters(filter.MetricFilter)
 	RegisterRoutes(server)
+
 	log.Fatal(server.Start(":8080"))
 }

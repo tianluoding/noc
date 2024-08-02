@@ -20,7 +20,10 @@ func (h *MapRouter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *MapRouter) Route(method string, path string, handler HandlerFunc) {
+func (h *MapRouter) Route(method string, path string, handler HandlerFunc, filters ...FilterFunc) {
+	for i := len(filters) - 1; i >= 0; i-- {
+		handler = filters[i](handler)
+	}
 	h.handlers[h.key(method, path)] = handler
 }
 
