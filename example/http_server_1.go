@@ -16,7 +16,7 @@ type User struct {
 	Name string `json:"name"`
 }
 
-func RegisterRoutes(server *noc.ExampleServer) {
+func RegisterRoutes(server *noc.Noc) {
 	server.GET("/user", getUser)
 	server.POST("/user", registerUser)
 }
@@ -39,7 +39,7 @@ func registerUser(ctx *noc.Context) error {
 
 func main() {
 	logger.InitLogger()
-	server := noc.NewExampleServer("example")
+	server := noc.NewNoc("example web")
 	server.AddFilters(filter.MetricFilter)
 	RegisterRoutes(server)
 
