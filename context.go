@@ -15,6 +15,15 @@ func NewContext(w http.ResponseWriter, r *http.Request) *Context {
 	return &Context{R: r, W: w}
 }
 
+func (ctx *Context) Param(name string) string {
+	paramsInterface := ctx.R.Context().Value("params")
+	params := make(map[string]string)
+	if paramsMap, ok := paramsInterface.(map[string]string); ok {
+		params = paramsMap
+	}
+	return params[name]
+}
+
 func (ctx *Context) ReadJSON(data interface{}) error {
 	err := json.NewDecoder(ctx.R.Body).Decode(&data)
 	if err != nil {

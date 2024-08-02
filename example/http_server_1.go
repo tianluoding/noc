@@ -5,6 +5,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/tianluoding/noc"
 	"github.com/tianluoding/noc/filter"
@@ -19,6 +20,14 @@ type User struct {
 func RegisterRoutes(server *noc.Noc) {
 	server.GET("/user", getUser)
 	server.POST("/user", registerUser)
+	server.GET("/user/:id", getUserByID)
+}
+
+func getUserByID(ctx *noc.Context) error {
+	id := ctx.Param("id")
+	numId, _ := strconv.Atoi(id)
+	user := User{ID: numId, Name: "Jo Jo"}
+	return ctx.WriteJSON(http.StatusOK, user)
 }
 
 func getUser(ctx *noc.Context) error {

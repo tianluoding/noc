@@ -57,7 +57,8 @@ func (s *Noc) AddFilters(filters ...FilterFunc) {
 }
 
 func NewNoc(serverName string) *Noc {
-	routerDefault := NewMapRouter()
+	// routerDefault := NewMapRouter()
+	routerDefault := NewTrieRouter()
 
 	return &Noc{
 		ServerName: serverName,
