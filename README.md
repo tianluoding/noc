@@ -16,6 +16,17 @@ func getUserByID(ctx *noc.Context) error {
 	return ctx.WriteJSON(http.StatusOK, user)
 }
 
+func registerUser(ctx *noc.Context) error {
+	var user User
+	err := ctx.ReadJSON(&user)
+	if err != nil {
+		logger.Logger.Errorf("Error reading JSON: %v", err)
+		return err
+	}
+	logger.Logger.Infof("Received user: %+v", user)
+	return ctx.WriteJSON(http.StatusOK, nil)
+}
+
 func main() {
     // init logger
 	logger.InitLogger()
@@ -25,6 +36,8 @@ func main() {
 	server.GET("/user", getUser)
     // add route use :param
     server.GET("/user/:id", getUserByID)
+    // post route
+    server.POST("/user", registerUser)
     // start server
 	if err := server.Start(":8080"); err != nil {
         logger.Logger.Fatal(err)
