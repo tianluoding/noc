@@ -28,19 +28,19 @@ func registerUser(ctx *noc.Context) error {
 }
 
 func main() {
-    // init logger
+    	// init logger
 	logger.InitLogger()
-    // create noc server
+    	// create noc server
 	server := noc.NewNoc("example web")
-    // add route
+    	// add route
 	server.GET("/user", getUser)
-    // add route use :param
-    server.GET("/user/:id", getUserByID)
-    // post route
-    server.POST("/user", registerUser)
-    // start server
+    	// add route use :param
+    	server.GET("/user/:id", getUserByID)
+    	// post route
+    	server.POST("/user", registerUser)
+    	// start server
 	if err := server.Start(":8080"); err != nil {
-        logger.Logger.Fatal(err)
-    }
+        	logger.Logger.Fatal(err)
+    	}
 }
 ```
