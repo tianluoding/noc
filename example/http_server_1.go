@@ -20,7 +20,8 @@ type User struct {
 func RegisterRoutes(server *noc.Noc) {
 	server.GET("/user", getUser)
 	server.POST("/user", registerUser)
-	server.GET("/user/*", getUserByID)
+	// 路径参数使用:key的形式
+	server.GET("/user/:id", getUserByID)
 }
 
 func getUserByID(ctx *noc.Context) error {

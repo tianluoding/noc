@@ -9,6 +9,7 @@ import (
 type trieNode struct {
 	children map[string]*trieNode
 	methods  map[string]HandlerFunc
+	params   string
 }
 
 func newTrieNode() *trieNode {
@@ -32,10 +33,10 @@ func (r *trieRouter) addRoute(method string, path string, handler HandlerFunc) {
 	node := r.root
 	segments := splitPath(path)
 	for _, segment := range segments {
-		if segment == "*" {
-			// 处理动态路径参数
-			node.children[segment] = newTrieNode()
-			node = node.children[segment]
+		if strings.HasPrefix(segment, ":") {
+			node.children[":"] = newTrieNode()
+			node = node.children[":"]
+			node.params = segment[1:]
 			break
 		} else {
 			if child, exists := node.children[segment]; exists {
@@ -65,8 +66,9 @@ func (r *trieRouter) findRoute(method string, path string) (handler HandlerFunc,
 	for _, segment := range segments {
 		if child, exists := node.children[segment]; exists {
 			node = child
-		} else if child, exists := node.children["*"]; exists {
+		} else if child, exists := node.children[":"]; exists {
 			node = child
+			params[node.params] = segment
 		} else {
 			return nil, nil
 		}
