@@ -3,7 +3,6 @@
 package main
 
 import (
-	"log"
 	"net/http"
 	"strconv"
 
@@ -53,5 +52,7 @@ func main() {
 	server.AddFilters(filter.MetricFilter)
 	RegisterRoutes(server)
 
-	log.Fatal(server.Start(":8080"))
+	if err := server.Start(":8080"); err != nil {
+		logger.Logger.Fatal(err)
+	}
 }
