@@ -2,7 +2,6 @@ package noc
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"strings"
 )
@@ -63,12 +62,10 @@ func (r *trieRouter) findRoute(method string, path string) (handler HandlerFunc,
 	segments := splitPath(path)
 	params = make(map[string]string)
 
-	for i, segment := range segments {
+	for _, segment := range segments {
 		if child, exists := node.children[segment]; exists {
 			node = child
 		} else if child, exists := node.children["*"]; exists {
-			// 动态路径参数
-			params[fmt.Sprintf("param%d", i)] = segment
 			node = child
 		} else {
 			return nil, nil

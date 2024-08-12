@@ -20,7 +20,7 @@ type User struct {
 func RegisterRoutes(server *noc.Noc) {
 	server.GET("/user", getUser)
 	server.POST("/user", registerUser)
-	server.GET("/user/:id", getUserByID)
+	server.GET("/user/*", getUserByID)
 }
 
 func getUserByID(ctx *noc.Context) error {
